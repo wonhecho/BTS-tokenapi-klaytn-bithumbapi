@@ -6,6 +6,7 @@ import net.api.cho.stockdata.stock.Repository.WalletRepository;
 import net.api.cho.stockdata.stock.WalletDto;
 import net.api.cho.stockdata.stock.api.Createwallet;
 import net.api.cho.stockdata.stock.api.Priceapi;
+import net.api.cho.stockdata.stock.api.sendKlay;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,6 +18,7 @@ public class JsonService {
     private final Priceapi priceapi;
     private final Createwallet createwallet;
     private final WalletRepository walletRepository;
+    private final sendKlay sendKlay;
 
     @Transactional(readOnly = true)
     public Object init() throws IOException, ParseException {
@@ -38,9 +40,12 @@ public class JsonService {
         walletRepository.save(wallet);
         return walletinfo;
     }
-    public String much() throws IOException,ParseException{
-        String klay = createwallet.muchWallet();
+    public double much() throws IOException,ParseException{
+        double klay = createwallet.muchWallet();
         return klay;
+    }
+    public Object send() throws ParseException{
+        return sendKlay.send();
     }
 
 }

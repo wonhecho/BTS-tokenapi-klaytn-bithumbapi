@@ -10,9 +10,12 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.math.BigInteger;
+import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.Locale;
 import java.util.Map;
 
 import org.springframework.web.client.RestTemplate;
@@ -42,7 +45,7 @@ public class Createwallet {
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         return restTemplates.exchange(URL,HttpMethod.POST,entity,WalletDto.class).getBody();
     }
-    public String muchWallet() throws IOException, ParseException {
+    public double muchWallet() throws IOException, ParseException {
         String url = "https://node-api.klaytnapi.com/v1/klaytn";
         final HttpHeaders headers = new HttpHeaders();
         headers.set("x-chain-id", chain_id);
@@ -50,7 +53,7 @@ public class Createwallet {
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject request = new JSONObject();
         JSONArray array = new JSONArray();
-        array.add("0x4c2AbfbB02A484CC1b43EEd9Bb744Cf11971dACF");
+        array.add("0xC5233f6b0b4d731317eaF5F1de0299e721bdCB09");
         array.add("latest");
         request.put("id", 1);
         request.put("jsonrpc", "2.0");
@@ -65,8 +68,23 @@ public class Createwallet {
         JSONObject obj = (JSONObject) parser.parse(jText);
         System.out.println(obj.get("result"));
         String klayhex =  obj.get("result").toString();
-        long klay = Long.decode(klayhex);
-        System.out.println(klay);
-        return response.toString();
+        double remainklay = HexCalculator(klayhex);
+        return remainklay;
     }
+    public double HexCalculator(String hex){
+        double result = 0;
+        for (int i=0; i<=hex.length()-1;i++)
+        {
+            if(hex.charAt(i)>='A' && hex.charAt(i)<='F')
+                result = result * 16 + hex.charAt(i) - 'A' + 10;
+            else if(hex.charAt(i)>='a' && hex.charAt(i) <= 'f')
+                result = result * 16 + hex.charAt(i) -'a' + 10;
+            else if (hex.charAt(i) >='0' && hex.charAt(i) <= '9')
+                result = result * 16 + hex.charAt(i) - '0';
+
+            System.out.println(result);
+        }
+        return (result/Math.pow(10,18));
+    }
+
 }

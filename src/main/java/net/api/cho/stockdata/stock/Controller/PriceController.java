@@ -28,9 +28,13 @@ public class PriceController {
     public Object create() throws IOException{
         return jsonService.create();
     }
-    @GetMapping("/Balancewallet")
-    public String much() throws IOException,ParseException{
+    @GetMapping("/balancewallet")
+    public double much() throws IOException,ParseException{
         return jsonService.much();
+    }
+    @GetMapping("/sendklay")
+    public Object send() throws ParseException{
+        return jsonService.send();
     }
 
 }
