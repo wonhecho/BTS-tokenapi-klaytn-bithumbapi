@@ -36,5 +36,9 @@ public class PriceController {
     public Object send() throws ParseException{
         return jsonService.send();
     }
+    @GetMapping("/makeNFT")
+    public Object makeNFT() throws  ParseException{
+        return jsonService.makeNFT();
+    }
 
 }

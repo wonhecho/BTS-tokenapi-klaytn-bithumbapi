@@ -5,6 +5,7 @@ import net.api.cho.stockdata.stock.Domain.Wallet;
 import net.api.cho.stockdata.stock.Repository.WalletRepository;
 import net.api.cho.stockdata.stock.WalletDto;
 import net.api.cho.stockdata.stock.api.Createwallet;
+import net.api.cho.stockdata.stock.api.MakeNFT;
 import net.api.cho.stockdata.stock.api.Priceapi;
 import net.api.cho.stockdata.stock.api.sendKlay;
 import org.json.simple.parser.ParseException;
@@ -19,6 +20,7 @@ public class JsonService {
     private final Createwallet createwallet;
     private final WalletRepository walletRepository;
     private final sendKlay sendKlay;
+    private final MakeNFT makeNFT;
 
     @Transactional(readOnly = true)
     public Object init() throws IOException, ParseException {
@@ -46,6 +48,9 @@ public class JsonService {
     }
     public Object send() throws ParseException{
         return sendKlay.send();
+    }
+    public Object makeNFT() throws ParseException{
+        return makeNFT.makeNFT();
     }
 
 }
