@@ -13,6 +13,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -43,8 +44,8 @@ public class NFTServiceImpl implements NFTService {
         walletRepository.save(wallet);
         return walletinfo;
     }
-    public double much() throws IOException,ParseException{
-        double klay = createwallet.muchWallet();
+    public Optional<Double> much(String account) throws IOException,ParseException{
+        Optional<Double> klay = createwallet.muchWallet(account);
         return klay;
     }
     public Object send() throws ParseException{

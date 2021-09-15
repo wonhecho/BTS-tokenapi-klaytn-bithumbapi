@@ -7,9 +7,11 @@ import net.api.cho.stockdata.stock.Service.NFTServiceImpl;
 import net.api.cho.stockdata.stock.Service.NFTService;
 import net.api.cho.stockdata.stock.api.Createwallet;
 import org.json.simple.parser.ParseException;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @RestController
@@ -18,36 +20,36 @@ public class PriceController {
     private final Createwallet createwallet;
 
     @GetMapping("/api")
-    public Object nowprice() throws IOException, ParseException {
-        return NFTService.init();
+    public ResponseEntity nowprice() throws IOException, ParseException {
+        return ResponseEntity.ok(NFTService.init());
     }
     @GetMapping("/wallet")
-    public Object check() throws IOException{
-        return NFTService.check();
+    public ResponseEntity<Object> check() throws IOException{
+        return ResponseEntity.ok(NFTService.check());
     }
     @GetMapping("/createwallet")
-    public Object create() throws IOException{
-        return NFTService.create();
+    public ResponseEntity create() throws IOException{
+        return ResponseEntity.ok(NFTService.create());
     }
-    @GetMapping("/balancewallet")
-    public double much() throws IOException,ParseException{
-        return NFTService.much();
+    @GetMapping("/balancewallet/{account}")
+    public ResponseEntity<Optional<Double>> much(@PathVariable String account) throws IOException,ParseException{
+        return ResponseEntity.ok(NFTService.much(account));
     }
     @GetMapping("/sendklay")
-    public Object send() throws ParseException{
-        return NFTService.send();
+    public ResponseEntity send() throws ParseException{
+        return ResponseEntity.ok(NFTService.send());
     }
     @GetMapping("/makeNFT")
-    public Object makeNFT() throws  ParseException{
-        return NFTService.makeNFT();
+    public ResponseEntity makeNFT() throws  ParseException{
+        return ResponseEntity.ok(NFTService.makeNFT());
     }
     @GetMapping("/checkNFT/{account}")
-    public Object checkNFT(@PathVariable String account) throws ParseException{
-        return NFTService.checkNFT(account);
+    public ResponseEntity checkNFT(@PathVariable String account) throws ParseException{
+        return ResponseEntity.ok(NFTService.checkNFT(account));
     }
     @PostMapping("/sendNFT")
-    public Object sendNFT(@RequestBody NFT nft) throws ParseException{
-        return NFTService.sendNFT(nft);
+    public ResponseEntity sendNFT(@RequestBody NFT nft) throws ParseException{
+        return ResponseEntity.ok(NFTService.sendNFT(nft));
     }
 
 }

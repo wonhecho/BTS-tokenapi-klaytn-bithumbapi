@@ -13,10 +13,7 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.nio.ByteBuffer;
 import java.nio.charset.Charset;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.Locale;
-import java.util.Map;
+import java.util.*;
 
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponents;
@@ -45,7 +42,7 @@ public class Createwallet {
         final HttpEntity<String> entity = new HttpEntity<>(headers);
         return restTemplates.exchange(URL,HttpMethod.POST,entity,WalletDto.class).getBody();
     }
-    public double muchWallet() throws IOException, ParseException {
+    public Optional<Double> muchWallet(String account) throws IOException, ParseException {
         String url = "https://node-api.klaytnapi.com/v1/klaytn";
         final HttpHeaders headers = new HttpHeaders();
         headers.set("x-chain-id", chain_id);
@@ -53,7 +50,7 @@ public class Createwallet {
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject request = new JSONObject();
         JSONArray array = new JSONArray();
-        array.add("0xC5233f6b0b4d731317eaF5F1de0299e721bdCB09");
+        array.add(account);
         array.add("latest");
         request.put("id", 1);
         request.put("jsonrpc", "2.0");
@@ -68,7 +65,7 @@ public class Createwallet {
         JSONObject obj = (JSONObject) parser.parse(jText);
         System.out.println(obj.get("result"));
         String klayhex =  obj.get("result").toString();
-        double remainklay = HexCalculator(klayhex);
+        Optional<Double> remainklay = Optional.ofNullable(HexCalculator(klayhex));
         return remainklay;
     }
     public double HexCalculator(String hex){
@@ -82,7 +79,6 @@ public class Createwallet {
             else if (hex.charAt(i) >='0' && hex.charAt(i) <= '9')
                 result = result * 16 + hex.charAt(i) - '0';
 
-            System.out.println(result);
         }
         return (result/Math.pow(10,18));
     }
