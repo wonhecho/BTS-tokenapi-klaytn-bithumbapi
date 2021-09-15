@@ -11,6 +11,7 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import org.json.simple.parser.ParseException;
+import reactor.core.publisher.Flux;
 
 @Service
 public class Priceapi {
@@ -27,10 +28,10 @@ public class Priceapi {
 
         br = new BufferedReader(new InputStreamReader(urlConnection.getInputStream(), "UTF-8"));
 
-        String returnLine;
-        while ((returnLine = br.readLine()) != null) {
-            result.append(returnLine + "\n\r");
-        }
+        Flux<String> flux = Flux.just(br.readLine());
+
+        flux.subscribe(result::append);
+
         urlConnection.disconnect();
 
         String jText = result.toString();

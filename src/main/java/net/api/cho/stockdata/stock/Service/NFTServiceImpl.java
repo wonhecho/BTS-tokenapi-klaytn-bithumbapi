@@ -1,11 +1,12 @@
 package net.api.cho.stockdata.stock.Service;
 
 import lombok.RequiredArgsConstructor;
+import net.api.cho.stockdata.stock.Domain.NFT;
 import net.api.cho.stockdata.stock.Domain.Wallet;
 import net.api.cho.stockdata.stock.Repository.WalletRepository;
 import net.api.cho.stockdata.stock.WalletDto;
 import net.api.cho.stockdata.stock.api.Createwallet;
-import net.api.cho.stockdata.stock.api.NFT;
+import net.api.cho.stockdata.stock.api.NFTapi;
 import net.api.cho.stockdata.stock.api.Priceapi;
 import net.api.cho.stockdata.stock.api.sendKlay;
 import org.json.simple.parser.ParseException;
@@ -15,12 +16,12 @@ import java.io.IOException;
 
 @RequiredArgsConstructor
 @Service
-public class JsonService {
+public class NFTServiceImpl implements NFTService {
     private final Priceapi priceapi;
     private final Createwallet createwallet;
     private final WalletRepository walletRepository;
     private final sendKlay sendKlay;
-    private final NFT nft;
+    private final NFTapi NFTapi;
 
     @Transactional(readOnly = true)
     public Object init() throws IOException, ParseException {
@@ -50,13 +51,13 @@ public class JsonService {
         return sendKlay.send();
     }
     public Object makeNFT() throws ParseException{
-        return nft.makeNFT();
+        return NFTapi.makeNFT();
     }
     public Object checkNFT(String account) throws ParseException{
-        return nft.checkNFT(account);
+        return NFTapi.checkNFT(account);
     }
-    public Object sendNFT() throws ParseException{
-        return nft.sendNFT();
+    public Object sendNFT(NFT nft) throws ParseException{
+        return NFTapi.sendNFT(nft);
     }
 
 }

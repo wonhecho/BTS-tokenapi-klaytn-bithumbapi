@@ -1,5 +1,6 @@
 package net.api.cho.stockdata.stock;
 
+import net.api.cho.stockdata.stock.Domain.NFT;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -11,4 +12,6 @@ public class Configuation {
     public RestTemplate getRestTemplate(){
         return new RestTemplate();
     }
+    @Bean
+    public NFT getNFT() { return new NFT(); }
 }
