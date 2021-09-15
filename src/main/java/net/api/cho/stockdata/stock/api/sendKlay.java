@@ -33,7 +33,7 @@ public class sendKlay {
         boolean submit = TRUE;
         request.put("from", "0x4c2AbfbB02A484CC1b43EEd9Bb744Cf11971dACF");
         request.put("value", "0xDE0B6B3A7640000");
-        request.put("to","0x20AAEdC4b4815f78aa79dC84e285bCD88f22fba9");
+        request.put("to","0xC5233f6b0b4d731317eaF5F1de0299e721bdCB09");
         request.put("memo", "0x123");
         request.put("nonce",0);
         request.put("submit", submit);

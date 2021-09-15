@@ -17,7 +17,7 @@ public class Priceapi {
     public Object callApi() throws IOException,ParseException {
         StringBuilder result = new StringBuilder();
 
-        String urlstr = "https://api.bithumb.com/public/candlestick/KLAY_KRW/24h";
+        String urlstr = "https://api.bithumb.com/public/candlestick/KLAY_KRW/24h";  // 기준시간 - 시가 - 종가 - 고가 - 저가 - 거래량
         URL url = new URL(urlstr);
 
         HttpURLConnection urlConnection = (HttpURLConnection) url.openConnection();
