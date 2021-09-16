@@ -21,9 +21,5 @@ public class PriceController {
     public ResponseEntity nowprice() throws IOException, ParseException {
         return ResponseEntity.ok(priceService.init());
     }
-    @GetMapping("/sendklay")
-    public ResponseEntity send() throws ParseException{
-        return ResponseEntity.ok(NFTService.send());
-    }
 
 }

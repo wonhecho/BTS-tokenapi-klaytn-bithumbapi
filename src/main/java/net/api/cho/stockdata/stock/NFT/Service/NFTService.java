@@ -8,7 +8,6 @@ import java.io.IOException;
 
 @Component
 public interface NFTService {
-    Object send() throws ParseException;
     Object makeNFT() throws ParseException;
     Object checkNFT(String account) throws ParseException;
     Object sendNFT(NFT nft) throws ParseException;

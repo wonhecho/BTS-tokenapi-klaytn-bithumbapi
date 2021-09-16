@@ -1,5 +1,6 @@
 package net.api.cho.stockdata.stock.Wallet.Service;
 
+import net.api.cho.stockdata.stock.Wallet.Dto.KlayDto;
 import net.api.cho.stockdata.stock.Wallet.Dto.WalletDto;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
@@ -13,5 +14,6 @@ public interface WalletService {
     Object CheckWallet() throws IOException;
     WalletDto CreateWallet() throws IOException;
     Optional<Double> muchWallet(String account) throws IOException, ParseException;
+    Object send(KlayDto klayDto) throws ParseException;
 
 }

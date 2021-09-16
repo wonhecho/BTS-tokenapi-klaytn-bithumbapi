@@ -1,6 +1,7 @@
-package net.api.cho.stockdata.stock.api;
+package net.api.cho.stockdata.stock.Wallet.Api;
 
 import lombok.RequiredArgsConstructor;
+import net.api.cho.stockdata.stock.Wallet.Dto.KlayDto;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -18,22 +19,23 @@ import static java.lang.Boolean.TRUE;
 
 @Service
 @RequiredArgsConstructor
-public class sendKlay {
+public class SendKlay {
     private final RestTemplate restTemplates;
     private final String chain_id = "1001";
     private final String Auth = "Basic S0FTSzA0QTRYNEI1WVJBTE1EUDBUTzUzOnRTQ1VacVhoLUt4a0dnTklwdHZVQWV5aGtodnFLMmFHeVVKMHAtblg=";
     private final String URL = "https://wallet-api.klaytnapi.com/v2/tx/value";
 
-    public Object send() throws ParseException {
+    public Object send(KlayDto klayDto) throws ParseException {
         final HttpHeaders headers = new HttpHeaders();
         headers.set("x-chain-id", chain_id);
         headers.set("Authorization", Auth);
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject request = new JSONObject();
         boolean submit = TRUE;
-        request.put("from", "0x4c2AbfbB02A484CC1b43EEd9Bb744Cf11971dACF");
-        request.put("value", "0xDE0B6B3A7640000");
-        request.put("to","0xC5233f6b0b4d731317eaF5F1de0299e721bdCB09");
+        String value = changeNumber(klayDto.getValue()*Math.pow(10,18));
+        request.put("from", klayDto.getFrom());
+        request.put("value", value);
+        request.put("to",klayDto.getTo());
         request.put("memo", "0x123");
         request.put("nonce",0);
         request.put("submit", submit);
@@ -46,5 +48,31 @@ public class sendKlay {
         JSONObject obj = (JSONObject) parser.parse(jText);
         return obj;
 
+    }
+    public static String changeNumber(double num) {
+        String answer = "";
+        int remainder = 0;
+        while(num != 0) {
+            remainder = (int) (num%16);
+            if(num%16 < 10) {
+                answer = remainder + answer;
+            } else {
+                answer = (char)(remainder + 55) + answer;
+            }
+            num /= 16;
+        }
+        String resultdata = "";
+        for (int i = 0; i<answer.length()-1;i++){
+            if(answer.charAt(i) == '0'){
+                continue;
+            }
+            else {
+                System.out.println(i);
+                resultdata = answer.substring(i,answer.length());
+                break;
+            }
+        }
+        System.out.println("return data =" + resultdata);
+        return "0x"+resultdata;
     }
 }

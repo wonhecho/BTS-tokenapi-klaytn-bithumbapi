@@ -1,8 +1,10 @@
 package net.api.cho.stockdata.stock.Wallet.Service;
 
 import lombok.RequiredArgsConstructor;
+import net.api.cho.stockdata.stock.Wallet.Api.SendKlay;
 import net.api.cho.stockdata.stock.Wallet.Api.WalletApi;
 import net.api.cho.stockdata.stock.Wallet.Domain.Wallet;
+import net.api.cho.stockdata.stock.Wallet.Dto.KlayDto;
 import net.api.cho.stockdata.stock.Wallet.Dto.WalletDto;
 import net.api.cho.stockdata.stock.Wallet.Repository.WalletRepository;
 import org.json.simple.parser.ParseException;
@@ -16,6 +18,7 @@ import java.util.Optional;
 public class WalletServiceImpl implements WalletService{
     private final WalletApi wallet;
     private final WalletRepository walletRepository;
+    private final SendKlay sendKlay;
 
     @Override
     public Object CheckWallet() throws IOException {
@@ -41,5 +44,10 @@ public class WalletServiceImpl implements WalletService{
     public Optional<Double> muchWallet(String account) throws IOException, ParseException {
         Optional<Double> klay = wallet.muchWallet(account);
         return klay;
+    }
+
+    @Override
+    public Object send(KlayDto klayDto) throws ParseException{
+        return sendKlay.send(klayDto);
     }
 }
