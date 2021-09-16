@@ -1,4 +1,4 @@
-package net.api.cho.stockdata.stock.Domain;
+package net.api.cho.stockdata.stock.NFT.Domain;
 
 
 import lombok.Data;

@@ -1,4 +1,4 @@
-package net.api.cho.stockdata.stock.api;
+package net.api.cho.stockdata.stock.Price;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;

@@ -1,4 +1,4 @@
-package net.api.cho.stockdata.stock.Domain;
+package net.api.cho.stockdata.stock.Wallet.Domain;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;

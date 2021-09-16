@@ -1,7 +1,6 @@
-package net.api.cho.stockdata.stock.Repository;
+package net.api.cho.stockdata.stock.Wallet.Repository;
 
-import net.api.cho.stockdata.stock.Domain.Wallet;
-import net.api.cho.stockdata.stock.WalletDto;
+import net.api.cho.stockdata.stock.Wallet.Domain.Wallet;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

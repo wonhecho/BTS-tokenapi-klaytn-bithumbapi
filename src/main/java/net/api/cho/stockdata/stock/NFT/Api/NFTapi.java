@@ -1,9 +1,7 @@
-package net.api.cho.stockdata.stock.api;
+package net.api.cho.stockdata.stock.NFT.Api;
 
 import lombok.RequiredArgsConstructor;
-import net.api.cho.stockdata.stock.Domain.NFT;
-import net.api.cho.stockdata.stock.WalletDto;
-import org.json.simple.JSONArray;
+import net.api.cho.stockdata.stock.NFT.Domain.NFT;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,11 +9,6 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.Map;
 
 @RequiredArgsConstructor
@@ -40,7 +33,7 @@ public class NFTapi {
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject request = new JSONObject();
         request.put("to","0x5819790c4214e8c91801C2E8Fa469e3221e95FA5");
-        request.put("id","0x131");
+        request.put("id","0x134");
         request.put("uri","https://metastore.kip17.com/0xbe02aba/0x1");
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
         System.out.println(request.toString());

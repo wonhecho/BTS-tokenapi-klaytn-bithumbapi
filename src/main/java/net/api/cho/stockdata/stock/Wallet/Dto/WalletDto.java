@@ -1,4 +1,4 @@
-package net.api.cho.stockdata.stock;
+package net.api.cho.stockdata.stock.Wallet.Dto;
 
 import lombok.Data;
 
