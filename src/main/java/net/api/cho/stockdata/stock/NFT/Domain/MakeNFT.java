@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Data
 @Entity
@@ -11,6 +12,9 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class MakeNFT {
     @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Column(name = "NO")
+    private Integer NO;
     @Column(name = "id")
     private String id;
     @Column(name = "name")
@@ -19,13 +23,17 @@ public class MakeNFT {
     private String description;
     @Column(name = "image")
     private String image;
+    @Column(name = "owner")
+    private String owner;
+    @Column(name = "Date")
+    private String date;
 
-    public MakeNFT(String id, String name, String description, String image)
+    public MakeNFT( String name, String description, String image, String owner)
     {
-        this.id = id;
         this.name = name;
         this.description = description;
         this.image = image;
+        this.owner = owner;
     }
 
 }

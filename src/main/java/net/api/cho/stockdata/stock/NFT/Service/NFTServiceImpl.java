@@ -5,12 +5,10 @@ import lombok.RequiredArgsConstructor;
 import net.api.cho.stockdata.stock.NFT.Domain.MakeNFT;
 import net.api.cho.stockdata.stock.NFT.Domain.NFT;
 import net.api.cho.stockdata.stock.NFT.Repository.NFTRepository;
-import net.api.cho.stockdata.stock.Wallet.Repository.WalletRepository;
 import net.api.cho.stockdata.stock.Wallet.Api.WalletApi;
 import net.api.cho.stockdata.stock.NFT.Api.NFTapi;
 import net.api.cho.stockdata.stock.Price.Priceapi;
 import net.api.cho.stockdata.stock.Wallet.Api.SendKlay;
-import org.json.simple.JSONArray;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
@@ -28,11 +26,12 @@ public class NFTServiceImpl implements NFTService {
     @Override
     public Object makeNFT(MakeNFT makeNFT) throws ParseException{
         nftRepository.save(makeNFT);
+        System.out.println(makeNFT);
         return NFTapi.makeNFT(makeNFT);
     }
     @Override
     public Object checkNFT(String account) throws ParseException{
-        return NFTapi.checkNFT(account);
+        return nftRepository.findByowner(account);
     }
     @Override
     public Object sendNFT(NFT nft) throws ParseException{
