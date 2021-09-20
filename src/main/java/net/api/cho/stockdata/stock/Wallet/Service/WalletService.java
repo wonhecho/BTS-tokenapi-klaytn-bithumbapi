@@ -6,14 +6,15 @@ import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Optional;
 
 @Component
 public interface WalletService {
 
     Object CheckWallet() throws IOException;
-    WalletDto CreateWallet() throws IOException;
-    Optional<Double> muchWallet(String account) throws IOException, ParseException;
+    HashMap<String, String> CreateWallet() throws IOException;
+    HashMap<String, Optional<Double>> muchWallet(String account) throws IOException, ParseException;
     Object send(KlayDto klayDto) throws ParseException;
 
 }

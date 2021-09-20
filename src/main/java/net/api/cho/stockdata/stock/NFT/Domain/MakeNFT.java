@@ -1,5 +1,6 @@
 package net.api.cho.stockdata.stock.NFT.Domain;
 
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -27,12 +28,14 @@ public class MakeNFT {
     private String owner;
     @Column(name = "Date")
     private String date;
+    @Column(name = "imagepath")
+    private String imagepath;
 
-    public MakeNFT( String name, String description, String image, String owner)
+    @Builder
+    public MakeNFT( String name, String description, String owner)
     {
         this.name = name;
         this.description = description;
-        this.image = image;
         this.owner = owner;
     }
 

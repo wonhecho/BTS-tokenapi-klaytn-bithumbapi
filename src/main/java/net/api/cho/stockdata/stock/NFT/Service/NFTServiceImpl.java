@@ -3,7 +3,8 @@ package net.api.cho.stockdata.stock.NFT.Service;
 import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import net.api.cho.stockdata.stock.NFT.Domain.MakeNFT;
-import net.api.cho.stockdata.stock.NFT.Domain.NFT;
+import net.api.cho.stockdata.stock.NFT.Domain.MakeNFTdto;
+import net.api.cho.stockdata.stock.NFT.Domain.NFTdto;
 import net.api.cho.stockdata.stock.NFT.Repository.NFTRepository;
 import net.api.cho.stockdata.stock.Wallet.Api.WalletApi;
 import net.api.cho.stockdata.stock.NFT.Api.NFTapi;
@@ -34,15 +35,22 @@ public class NFTServiceImpl implements NFTService {
         return nftRepository.findByowner(account);
     }
     @Override
-    public Object sendNFT(NFT nft) throws ParseException{
-        return NFTapi.sendNFT(nft);
+    public Object sendNFT(NFTdto NFTdto) throws ParseException{
+        return NFTapi.sendNFT(NFTdto);
     }
 
     @Override
-    public String findByid(String id) {
-        List<MakeNFT> findNFTS = nftRepository.findById(id);
-        String json = new Gson().toJson(findNFTS);
-        return json;
+    public Object findByid(String id) {
+//        List<MakeNFT> findNFTS = nftRepository.findById(id);
+//        String json = new Gson().toJson(findNFTS);
+//        return json;
+        Object obj = nftRepository.findById(id);
+        return obj;
+    }
+
+    @Override
+    public Object allNFT() {
+        return nftRepository.findAll();
     }
 
 

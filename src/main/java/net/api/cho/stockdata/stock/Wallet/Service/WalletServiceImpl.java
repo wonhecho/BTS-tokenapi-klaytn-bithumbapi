@@ -1,5 +1,6 @@
 package net.api.cho.stockdata.stock.Wallet.Service;
 
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import net.api.cho.stockdata.stock.Wallet.Api.SendKlay;
 import net.api.cho.stockdata.stock.Wallet.Api.WalletApi;
@@ -7,10 +8,14 @@ import net.api.cho.stockdata.stock.Wallet.Domain.Wallet;
 import net.api.cho.stockdata.stock.Wallet.Dto.KlayDto;
 import net.api.cho.stockdata.stock.Wallet.Dto.WalletDto;
 import net.api.cho.stockdata.stock.Wallet.Repository.WalletRepository;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 @Service
@@ -26,7 +31,7 @@ public class WalletServiceImpl implements WalletService{
     }
 
     @Override
-    public WalletDto CreateWallet() throws IOException {
+    public HashMap<String, String> CreateWallet() throws IOException {
         WalletDto walletinfo = wallet.CreateWallet();
         Wallet wallet = new Wallet();
         wallet.setAddress(walletinfo.getAddress());
@@ -36,14 +41,19 @@ public class WalletServiceImpl implements WalletService{
         wallet.setKrn(walletinfo.getKrn());
         wallet.setPublicKey(walletinfo.getPublicKey());
         wallet.setUpdatedAt(walletinfo.getUpdatedAt());
-        walletRepository.save(wallet);
-        return walletinfo;
+        String json = new Gson().toJson(walletinfo);
+        HashMap<String,String> hashMap = new HashMap<>();
+        hashMap.put("address",walletinfo.getAddress());
+//        walletRepository.save(wallet);
+        return hashMap;
     }
 
     @Override
-    public Optional<Double> muchWallet(String account) throws IOException, ParseException {
+    public HashMap<String, Optional<Double>> muchWallet(String account) throws IOException, ParseException {
         Optional<Double> klay = wallet.muchWallet(account);
-        return klay;
+        HashMap<String,Optional<Double>> hashMap = new HashMap<>();
+        hashMap.put("klay", klay);
+        return hashMap;
     }
 
     @Override

@@ -31,8 +31,7 @@ dependencies {
 	runtimeOnly 'org.mariadb.jdbc:mariadb-java-client'
 	implementation group: 'org.springframework', name: 'spring-context', version: '5.3.9'
 	implementation 'com.google.code.gson:gson:2.8.5'
-
-
+	compile 'org.springframework.cloud:spring-cloud-starter-aws:2.0.1.RELEASE'
 }
 
 test {

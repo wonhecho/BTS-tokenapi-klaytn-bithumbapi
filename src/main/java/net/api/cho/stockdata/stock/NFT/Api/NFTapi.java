@@ -2,9 +2,8 @@ package net.api.cho.stockdata.stock.NFT.Api;
 
 import lombok.RequiredArgsConstructor;
 import net.api.cho.stockdata.stock.NFT.Domain.MakeNFT;
-import net.api.cho.stockdata.stock.NFT.Domain.NFT;
+import net.api.cho.stockdata.stock.NFT.Domain.NFTdto;
 import net.api.cho.stockdata.stock.NFT.Repository.NFTRepository;
-import net.api.cho.stockdata.stock.NFT.Service.NFTService;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -12,11 +11,8 @@ import org.springframework.http.*;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.sql.Date;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -30,7 +26,7 @@ public class NFTapi {
     private final String address_alias = "kas-tutorial";
     private final String URL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token";
     private final String CheckURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/owner/";
-    private String SendURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token/";
+
 
     public Object makeNFT(MakeNFT makeNFT) throws ParseException {
         final HttpHeaders headers = new HttpHeaders();
@@ -60,13 +56,13 @@ public class NFTapi {
                 selectUser.setName(makeNFT.getName());
                 selectUser.setImage(makeNFT.getImage());
                 selectUser.setOwner(makeNFT.getOwner());
+                selectUser.setImagepath(makeNFT.getImagepath());
                 selectUser.setDate(LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
                 MakeNFT newMakeNFT = nftRepository.save(selectUser);
                 System.out.println("NFT "+ newMakeNFT);
             });
         }
         return obj;
-
     }
     public Object checkNFT(String account) throws ParseException{
         final HttpHeaders headers = new HttpHeaders();
@@ -79,22 +75,30 @@ public class NFTapi {
         System.out.println(jText);
         return response.toString();
     }
-    public Object sendNFT(NFT nft) throws ParseException{
+    public Object sendNFT(NFTdto NFTdto) throws ParseException{
+        String SendURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token/";
         final HttpHeaders headers = new HttpHeaders();
         headers.set("x-chain-id", chain_id);
         headers.set("Authorization", Auth);
         headers.setContentType(MediaType.APPLICATION_JSON);
         JSONObject request = new JSONObject();
-        request.put("sender",nft.getFrom());
-        request.put("owner",nft.getFrom());
-        request.put("to",nft.getTo());
+        request.put("sender", NFTdto.getFrom());
+        request.put("owner", NFTdto.getFrom());
+        request.put("to", NFTdto.getTo());
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
         System.out.println(request.toString());
-        SendURL = SendURL + nft.getId();
+        SendURL = SendURL + NFTdto.getId();
         System.out.println("SendURL = " + SendURL);
         ResponseEntity<String> response = restTemplates.postForEntity(SendURL,entity,String.class);
         String jText = response.getBody().toString();
         System.out.println(jText);
+        Optional<MakeNFT> changeNFT = nftRepository.findByid(NFTdto.getId());
+        changeNFT.ifPresent(selectUser -> {
+            selectUser.setOwner(NFTdto.getTo());
+            MakeNFT changeMakeNFT = nftRepository.save(selectUser);
+            System.out.println("NFT "+ changeMakeNFT);
+        });
+
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(jText);
         return obj;

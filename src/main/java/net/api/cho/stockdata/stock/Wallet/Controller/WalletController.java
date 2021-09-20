@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -22,11 +24,11 @@ public class WalletController {
         return ResponseEntity.ok(walletService.CheckWallet());
     }
     @GetMapping("/create")
-    public ResponseEntity<Object> create() throws IOException{
+    public ResponseEntity<HashMap<String, String>> create() throws IOException{
         return ResponseEntity.ok(walletService.CreateWallet());
     }
     @GetMapping("/much/{account}")
-    public ResponseEntity<Optional<Double>> much(@PathVariable String account) throws IOException, ParseException {
+    public ResponseEntity<HashMap<String, Optional<Double>>> much(@PathVariable String account) throws IOException, ParseException {
         return ResponseEntity.ok(walletService.muchWallet(account));
     }
     @PostMapping("/sendklay")
