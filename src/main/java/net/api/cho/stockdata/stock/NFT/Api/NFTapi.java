@@ -1,5 +1,6 @@
 package net.api.cho.stockdata.stock.NFT.Api;
 
+import com.google.gson.Gson;
 import lombok.RequiredArgsConstructor;
 import net.api.cho.stockdata.stock.NFT.Domain.MakeNFT;
 import net.api.cho.stockdata.stock.NFT.Domain.NFTdto;
@@ -13,6 +14,7 @@ import org.springframework.web.client.RestTemplate;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -28,7 +30,7 @@ public class NFTapi {
     private final String CheckURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/owner/";
 
 
-    public Object makeNFT(MakeNFT makeNFT) throws ParseException {
+    public String makeNFT(MakeNFT makeNFT) throws ParseException {
         final HttpHeaders headers = new HttpHeaders();
         headers.set("x-chain-id", chain_id);
         headers.set("Authorization", Auth);
@@ -46,7 +48,7 @@ public class NFTapi {
         System.out.println(jText);
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(jText);
-        System.out.println(obj.get("status"));
+        String status = obj.get("status").toString();
         if(obj.get("status").equals("Submitted")){
             Optional<MakeNFT> update = nftRepository.findByNO(makeNFT.getNO());
             update.ifPresent(selectUser -> {
@@ -62,19 +64,19 @@ public class NFTapi {
                 System.out.println("NFT "+ newMakeNFT);
             });
         }
-        return obj;
+            return status;
     }
-    public Object checkNFT(String account) throws ParseException{
-        final HttpHeaders headers = new HttpHeaders();
-        headers.set("x-chain-id", chain_id);
-        headers.set("Authorization", Auth);
-        final HttpEntity<String> entity = new HttpEntity<>(headers);
-        String checkURL = CheckURL+account;
-        JSONObject response = restTemplates.exchange(checkURL, HttpMethod.GET,entity, JSONObject.class).getBody();
-        String jText = response.toString();
-        System.out.println(jText);
-        return response.toString();
-    }
+//    public Object checkNFT(String account) throws ParseException{
+//        final HttpHeaders headers = new HttpHeaders();
+//        headers.set("x-chain-id", chain_id);
+//        headers.set("Authorization", Auth);
+//        final HttpEntity<String> entity = new HttpEntity<>(headers);
+//        String checkURL = CheckURL+account;
+//        JSONObject response = restTemplates.exchange(checkURL, HttpMethod.GET,entity, JSONObject.class).getBody();
+//        String jText = response.toString();
+//        System.out.println(jText);
+//        return response.toString();
+//    }
     public String deleteNFT(String from, String nft) throws ParseException{
         String SendURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token/"+nft;
         final HttpHeaders headers = new HttpHeaders();
@@ -87,11 +89,12 @@ public class NFTapi {
         HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
         ResponseEntity<String> response = ResponseEntity.ok(restTemplates.exchange(SendURL,HttpMethod.DELETE,entity,String.class).getBody());
         String[] status = response.getStatusCode().toString().split(" ");
+        HashMap<String,String> result = new HashMap<>();
         System.out.println(status[1]);
         return status[1];
 
     }
-    public Object sendNFT(NFTdto NFTdto) throws ParseException{
+    public String sendNFT(NFTdto NFTdto) throws ParseException{
         String SendURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token/";
         final HttpHeaders headers = new HttpHeaders();
         headers.set("x-chain-id", chain_id);
@@ -117,7 +120,8 @@ public class NFTapi {
 
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(jText);
-        return obj;
+        String status = obj.get("status").toString();
+        return status;
     }
     public static String changeNumber(double num) {
         String answer = "";

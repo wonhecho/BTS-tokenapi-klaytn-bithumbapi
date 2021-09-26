@@ -6,12 +6,14 @@ import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
+
 @Service
 @RequiredArgsConstructor
 public class PriceServiceImpl implements PriceService{
     private final Priceapi priceapi;
     @Cacheable(key="1",value = "total")
-    public Object init() throws IOException, ParseException {
+    public HashMap<String,Object> init() throws IOException, ParseException {
         return priceapi.callApi();
     }
 }

@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.HashMap;
 
 @RequiredArgsConstructor
 @RestController
@@ -17,7 +18,7 @@ public class PriceController {
     private final PriceService priceService;
 
     @GetMapping("/klayapi")
-    public ResponseEntity nowprice() throws IOException, ParseException {
+    public ResponseEntity<HashMap<String,Object>> nowprice() throws IOException, ParseException {
         return ResponseEntity.ok(priceService.init());
     }
 

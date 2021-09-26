@@ -5,12 +5,16 @@ import net.api.cho.stockdata.stock.AWSS3.S3Service.S3uploader;
 import net.api.cho.stockdata.stock.NFT.Domain.*;
 import net.api.cho.stockdata.stock.NFT.Repository.NFTRepository;
 import net.api.cho.stockdata.stock.NFT.Service.NFTService;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,52 +27,44 @@ public class NFTController {
     private final S3uploader s3uploader;
 
     @PostMapping("/makeNFT")
-    public ResponseEntity makeNFT(@RequestPart(value = "NFTInfo") MakeNFTdto makeNFTdto,
+    public ResponseEntity<HashMap<String,String>> makeNFT(@RequestPart(value = "NFTInfo") MakeNFTdto makeNFTdto,
                                   @RequestPart(value = "image") MultipartFile file) throws IOException, ParseException {
-        String imagepath = s3uploader.upload(file,"static");
-        MakeNFT insertNFT = new MakeNFT();
-        insertNFT.setDescription(makeNFTdto.getDescription());
-        insertNFT.setImage(makeNFTdto.getImage());
-        insertNFT.setOwner(makeNFTdto.getOwner());
-        insertNFT.setName(makeNFTdto.getName());
-        insertNFT.setImagepath(imagepath);
-        return ResponseEntity.ok(nftService.makeNFT(insertNFT));
+        return ResponseEntity.ok(nftService.makeNFT(makeNFTdto,file));
     }
     @GetMapping("/checkNFTbyaccount/{account}")
-    public ResponseEntity checkNFT(@PathVariable String account) throws ParseException{
+    public ResponseEntity<String> checkNFT(@PathVariable String account) throws IOException, ParseException{
         return ResponseEntity.ok(nftService.checkNFT(account));
     }
     @GetMapping("/checkNFTbyid/{NFTid}")
-    public ResponseEntity checkbyNFTid(@PathVariable String NFTid){
+    public ResponseEntity<HashMap<String,String>> checkbyNFTid(@PathVariable String NFTid){
         return ResponseEntity.ok(nftService.findByid(NFTid));
     }
     @PostMapping("/sendNFT")
-    public ResponseEntity sendNFT(@RequestBody NFTdto NFTdto) throws ParseException{
+    public ResponseEntity<HashMap<String,String>> sendNFT(@RequestBody NFTdto NFTdto) throws ParseException{
         return ResponseEntity.ok(nftService.sendNFT(NFTdto));
     }
     @GetMapping("/allNFT")
-    public ResponseEntity allNFT() throws ParseException{
+    public ResponseEntity<String> allNFT() throws IOException,ParseException{
         return ResponseEntity.ok(nftService.allNFT());
     }
     @DeleteMapping("/deleteNFT")
-    public ResponseEntity deleteNFT(@RequestBody Deletedto deletedto) throws ParseException{
+    public ResponseEntity<HashMap<String,String>> deleteNFT(@RequestBody Deletedto deletedto) throws ParseException{
         return ResponseEntity.ok(nftService.deleteNFT(deletedto));
     }
     @PostMapping("/likeNFT")
-    public ResponseEntity likeNFT(@RequestBody Likedto likedto) throws ParseException{
-        System.out.println("============"+likedto);
+    public ResponseEntity<HashMap<String,String>> likeNFT(@RequestBody Likedto likedto) throws ParseException{
         return ResponseEntity.ok(nftService.likeNFT(likedto));
     }
     @DeleteMapping("/likeNFT")
-    public ResponseEntity deletelike(@RequestBody Likedto likedto){
+    public ResponseEntity<HashMap<String,String>> deletelike(@RequestBody Likedto likedto){
         return ResponseEntity.ok(nftService.deletelike(likedto));
     }
     @GetMapping("/userlikelist/{user}")
-    public ResponseEntity likelist(@PathVariable String user) throws ParseException{
+    public ResponseEntity<String> likelist(@PathVariable String user) throws IOException, ParseException{
         return ResponseEntity.ok(nftService.likelist(user));
     }
     @GetMapping("/countlike/{Nft}")
-    public ResponseEntity likecount(@PathVariable String Nft){
+    public ResponseEntity<HashMap<String,Integer>> likecount(@PathVariable String Nft){
         return ResponseEntity.ok(nftService.countlike(Nft));
     }
 }

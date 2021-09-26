@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface NFTRepository extends JpaRepository<MakeNFT,Long> {
-    List<MakeNFT> findById(String id);
+    MakeNFT findById(String id);
     Optional<MakeNFT> findById(Integer id);
     Optional<MakeNFT> findByNO(Integer no);
     List<MakeNFT> findTop1ByOrderByIdAsc();

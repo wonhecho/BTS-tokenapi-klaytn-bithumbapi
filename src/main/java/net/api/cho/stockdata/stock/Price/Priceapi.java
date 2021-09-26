@@ -20,7 +20,7 @@ import reactor.core.publisher.Flux;
 
 @Service
 public class Priceapi {
-    public Object callApi() throws IOException,ParseException {
+    public HashMap<String,Object> callApi() throws IOException,ParseException {
         StringBuilder result = new StringBuilder();
 
         String urlstr = "https://api.bithumb.com/public/ticker/klay_KRW";  // 기준시간 - 시가 - 종가 - 고가 - 저가 - 거래량
@@ -55,7 +55,7 @@ public class Priceapi {
         Map<String,Object> data = (Map<String, Object>) parseResponse;
         System.out.println(data);
         List<Map<String,Object>> currentdata = new ArrayList<>();
-        JSONObject request = new JSONObject();
+        HashMap<String,Object> request = new JSONObject();
         HashMap<String,Object> addrequest = new HashMap<>();
         request.put("now_price",nowprice);
         request.put("time_stamp",data.get("date"));
