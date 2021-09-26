@@ -1,8 +1,8 @@
 cloud:
   aws:
     credentials:
-      accessKey: AKIAXNTNRGQFBIG6B47B
-      secretKey: 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
+      accessKey: as
+      secretKey: as
     s3:
       bucket: wonhee-bucket
     region:
