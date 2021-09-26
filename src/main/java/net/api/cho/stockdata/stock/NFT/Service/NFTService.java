@@ -1,8 +1,6 @@
 package net.api.cho.stockdata.stock.NFT.Service;
 
-import net.api.cho.stockdata.stock.NFT.Domain.MakeNFT;
-import net.api.cho.stockdata.stock.NFT.Domain.MakeNFTdto;
-import net.api.cho.stockdata.stock.NFT.Domain.NFTdto;
+import net.api.cho.stockdata.stock.NFT.Domain.*;
 import org.json.simple.parser.ParseException;
 import org.springframework.stereotype.Component;
 
@@ -13,4 +11,9 @@ public interface NFTService {
     Object sendNFT(NFTdto NFTdto) throws ParseException;
     Object findByid(String id);
     Object allNFT();
+    Object likeNFT(Likedto likedto);
+    Object likelist(String user);
+    Object deletelike(Likedto likedto);
+    Integer countlike(String nft);
+    Object deleteNFT(Deletedto deletedto) throws ParseException;
 }

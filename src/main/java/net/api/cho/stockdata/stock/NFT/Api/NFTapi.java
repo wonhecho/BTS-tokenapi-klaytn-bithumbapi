@@ -75,6 +75,22 @@ public class NFTapi {
         System.out.println(jText);
         return response.toString();
     }
+    public String deleteNFT(String from, String nft) throws ParseException{
+        String SendURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token/"+nft;
+        final HttpHeaders headers = new HttpHeaders();
+        headers.set("x-chain-id", chain_id);
+        headers.set("Authorization", Auth);
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        JSONObject request = new JSONObject();
+        request.put("from",from);
+        System.out.println(request);
+        HttpEntity<Map<String, Object>> entity = new HttpEntity<>(request, headers);
+        ResponseEntity<String> response = ResponseEntity.ok(restTemplates.exchange(SendURL,HttpMethod.DELETE,entity,String.class).getBody());
+        String[] status = response.getStatusCode().toString().split(" ");
+        System.out.println(status[1]);
+        return status[1];
+
+    }
     public Object sendNFT(NFTdto NFTdto) throws ParseException{
         String SendURL = "https://kip17-api.klaytnapi.com/v1/contract/"+address_alias+"/token/";
         final HttpHeaders headers = new HttpHeaders();
