@@ -11,6 +11,8 @@ import net.api.cho.stockdata.stock.NFT.Api.NFTapi;
 import net.api.cho.stockdata.stock.Price.Priceapi;
 import net.api.cho.stockdata.stock.Wallet.Api.SendKlay;
 import net.api.cho.stockdata.stock.AWSS3.S3Service.S3uploader;
+import net.api.cho.stockdata.stock.Wallet.Domain.Wallet;
+import net.api.cho.stockdata.stock.Wallet.Repository.WalletRepository;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,8 +20,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Optional;
 
 @RequiredArgsConstructor
 @Service
@@ -28,6 +32,7 @@ public class NFTServiceImpl implements NFTService {
     private final WalletApi wallet;
     private final NFTRepository nftRepository;
     private final LikeRepository likeRepository;
+    private final WalletRepository walletRepository;
     private final SendKlay sendKlay;
     private final NFTapi NFTapi;
     private final S3uploader s3uploader;
@@ -56,15 +61,31 @@ public class NFTServiceImpl implements NFTService {
     }
     @Override
     public String checkNFT(String account) throws IOException, ParseException{
-        Object find = nftRepository.findByowner(account);
-        String result = mapper.writeValueAsString(find);
+        List<MakeNFT> find = nftRepository.findByowner(account);
+        List<MakeNFT> addownername = new ArrayList<>();
+        for(int i=0;i<find.size();i++){
+            MakeNFT makeNFT = find.get(i);
+            makeNFT.setOwner(findownername(makeNFT.getOwner()));
+            addownername.add(makeNFT);
+        }
+        String result = mapper.writeValueAsString(addownername);
         return result;
     }
     @Override
     public HashMap<String,String> sendNFT(NFTdto NFTdto) throws ParseException{
-        String set = NFTapi.sendNFT(NFTdto);
+        NFTdto nft = new NFTdto();
+        nft.setId(NFTdto.getId());
+        nft.setFrom(findaddress(NFTdto.getFrom()));
+        nft.setTo(findaddress(NFTdto.getTo()));
+        String set = NFTapi.sendNFT(nft);
         HashMap<String,String> result = new HashMap<>();
         if(set.equals("Submitted")){
+            Optional<MakeNFT> changeNFT = nftRepository.findByid(NFTdto.getId());
+            changeNFT.ifPresent(selectUser -> {
+                selectUser.setOwner(NFTdto.getTo());
+                MakeNFT changeMakeNFT = nftRepository.save(selectUser);
+                System.out.println("NFT "+ changeMakeNFT);
+            });
             result.put("status","OK");
         }
         else
@@ -75,12 +96,14 @@ public class NFTServiceImpl implements NFTService {
     @Override
     public HashMap<String,String> findByid(String id) {
         MakeNFT findNFTS = nftRepository.findById(id);
+        String ownername = findownername(findNFTS.getOwner());
         HashMap<String,String> result = new HashMap<>();
         result.put("id",findNFTS.getId());
         result.put("name",findNFTS.getName());
         result.put("description",findNFTS.getDescription());
         result.put("image",findNFTS.getImage());
-        result.put("owner",findNFTS.getOwner());
+        result.put("email",findNFTS.getOwner());
+        result.put("owner",ownername);
         result.put("imagepath",findNFTS.getImagepath());
         result.put("date",findNFTS.getDate());
         return result;
@@ -88,8 +111,14 @@ public class NFTServiceImpl implements NFTService {
 
     @Override
     public String allNFT() throws IOException{
-        Object find = nftRepository.findAll();
-        String result = mapper.writeValueAsString(find);
+        List<MakeNFT> find = nftRepository.findAll();
+        List<MakeNFT> addownername = new ArrayList<>();
+        for(int i = 0; i<find.size();i++) {
+            MakeNFT makeNFT = find.get(i);
+            makeNFT.setOwner(findownername(makeNFT.getOwner()));
+            addownername.add(makeNFT);
+        }
+        String result = mapper.writeValueAsString(addownername);
         return result;
     }
     @Override
@@ -140,7 +169,7 @@ public class NFTServiceImpl implements NFTService {
     @Override
     public HashMap<String,String> deleteNFT(Deletedto deletedto) throws ParseException{
         String nft = deletedto.getId();
-        String from = deletedto.getFrom();
+        String from = findaddress(deletedto.getFrom());
         HashMap<String,String> result = new HashMap<>();
         String status = NFTapi.deleteNFT(from,nft);
         if(status.toString().equals("OK"))
@@ -161,4 +190,12 @@ public class NFTServiceImpl implements NFTService {
         return result;
     }
 
+    public String findownername(String email){
+        Wallet wallet = walletRepository.findByemail(email);
+        return wallet.getName();
+    }
+    public String findaddress(String email){
+        Wallet wallet = walletRepository.findByemail(email);
+        return wallet.getAddress();
+    }
 }

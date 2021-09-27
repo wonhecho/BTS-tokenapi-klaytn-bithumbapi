@@ -31,9 +31,9 @@ public class NFTController {
                                   @RequestPart(value = "image") MultipartFile file) throws IOException, ParseException {
         return ResponseEntity.ok(nftService.makeNFT(makeNFTdto,file));
     }
-    @GetMapping("/checkNFTbyaccount/{account}")
-    public ResponseEntity<String> checkNFT(@PathVariable String account) throws IOException, ParseException{
-        return ResponseEntity.ok(nftService.checkNFT(account));
+    @GetMapping("/checkNFTbyemail/{email}")
+    public ResponseEntity<String> checkNFT(@PathVariable String email) throws IOException, ParseException{
+        return ResponseEntity.ok(nftService.checkNFT(email));
     }
     @GetMapping("/checkNFTbyid/{NFTid}")
     public ResponseEntity<HashMap<String,String>> checkbyNFTid(@PathVariable String NFTid){

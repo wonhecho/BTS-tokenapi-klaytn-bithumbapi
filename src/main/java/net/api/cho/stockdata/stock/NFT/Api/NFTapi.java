@@ -111,12 +111,6 @@ public class NFTapi {
         ResponseEntity<String> response = restTemplates.postForEntity(SendURL,entity,String.class);
         String jText = response.getBody().toString();
         System.out.println(jText);
-        Optional<MakeNFT> changeNFT = nftRepository.findByid(NFTdto.getId());
-        changeNFT.ifPresent(selectUser -> {
-            selectUser.setOwner(NFTdto.getTo());
-            MakeNFT changeMakeNFT = nftRepository.save(selectUser);
-            System.out.println("NFT "+ changeMakeNFT);
-        });
 
         JSONParser parser = new JSONParser();
         JSONObject obj = (JSONObject) parser.parse(jText);

@@ -6,6 +6,7 @@ import net.api.cho.stockdata.stock.Wallet.Api.SendKlay;
 import net.api.cho.stockdata.stock.Wallet.Api.WalletApi;
 import net.api.cho.stockdata.stock.Wallet.Domain.Wallet;
 import net.api.cho.stockdata.stock.Wallet.Dto.KlayDto;
+import net.api.cho.stockdata.stock.Wallet.Dto.UserDto;
 import net.api.cho.stockdata.stock.Wallet.Dto.WalletDto;
 import net.api.cho.stockdata.stock.Wallet.Repository.WalletRepository;
 import org.json.simple.JSONObject;
@@ -31,21 +32,16 @@ public class WalletServiceImpl implements WalletService{
     }
 
     @Override
-    public HashMap<String, String> CreateWallet() throws IOException {
+    public HashMap<String, String> CreateWallet(UserDto userDto) throws IOException {
         WalletDto walletinfo = wallet.CreateWallet();
         Wallet wallet = new Wallet();
         wallet.setAddress(walletinfo.getAddress());
-        wallet.setChainId(walletinfo.getChainId());
-        wallet.setCreatedAt(walletinfo.getCreatedAt());
-        wallet.setKeyId(walletinfo.getKeyId());
-        wallet.setKrn(walletinfo.getKrn());
-        wallet.setPublicKey(walletinfo.getPublicKey());
-        wallet.setUpdatedAt(walletinfo.getUpdatedAt());
-        String json = new Gson().toJson(walletinfo);
-        HashMap<String,String> hashMap = new HashMap<>();
-        hashMap.put("address",walletinfo.getAddress());
-//        walletRepository.save(wallet);
-        return hashMap;
+        wallet.setEmail(userDto.getEmail());
+        wallet.setName(userDto.getName());
+        HashMap<String,String> result = new HashMap<>();
+        result.put("address",walletinfo.getAddress());
+        walletRepository.save(wallet);
+        return result;
     }
 
     @Override
